@@ -15,6 +15,7 @@ const boolean WIRELESS    = true;
 
 // SENSOR INFORMATION
 const int SENSOR_SONAR     = 1;
+int SENSOR_SONAR_THRESHOLD = 0;
 const int SENSOR_PIR       = 2;
 
 // CUSTOM SETTINGS
@@ -61,41 +62,6 @@ void setup()
 
 void loop()
 {
-  if (TRANSMITTER || (WIRELESS && RECEIVER))
-  {
-    if (SENSOR == SENSOR_SONAR)
-    {
-      SensorSonarButtonListener();
-      
-      DATA = SensorSonarState();
-    }
-    
-    if (SENSOR == SENSOR_PIR)
-    {
-      // Do Something
-    }
-    
-    if (DATA != DATA_PREVIOUS)
-    {
-      Serial.print("Writing: ");
-      Serial.println(DATA);
-      
-      RadioFrequencyWrite(((SENSOR * 100) + DATA));
-      
-      DATA_PREVIOUS = DATA;
-      
-      delay(500);
-    }
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  /*
   if (WIRELESS && RECEIVER)
   {
     DATA = RadioFrequencyRead();
@@ -174,5 +140,4 @@ void loop()
     
     return;
   }
-  */
 }
