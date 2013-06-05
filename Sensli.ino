@@ -26,7 +26,7 @@ int LED_PINS[3]  = { 10, 11, 9 };
 boolean TRIGGER_STATE = false;
 boolean LED_STATE     = false;
 int DATA;
-int DATA_PREVIOUS;
+unsigned long DATA_TIMESTAMP;
 
 void setup()
 {
@@ -59,6 +59,8 @@ void setup()
 
 void loop()
 {
+  unsigned long TIMESTAMP;
+  
   if (TRANSMITTER || (!WIRELESS && RECEIVER))
   {
     if (SENSOR == SENSOR_SONAR)
@@ -73,7 +75,7 @@ void loop()
       // Do Something
     }
     
-    if (DATA != DATA_PREVIOUS)
+    if (DATA != 0)
     {
       if (TRANSMITTER)
       {
@@ -81,8 +83,6 @@ void loop()
         
         Serial.println(DATA);
       }
-      
-      DATA_PREVIOUS = DATA;
       
       delay(STUTTER);
       
@@ -101,31 +101,28 @@ void loop()
         return;
       }
       
-      Serial.println(DATA);
+      SENSOR    = floor(DATA / 100);
+      DATA      = DATA % 100;
+      TIMESTAMP = millis();
       
-      SENSOR = floor(DATA / 100);
-      DATA   = DATA % 100;
+      if ((TIMESTAMP - DATA_TIMESTAMP) > STUTTER)
+      {
+        Serial.println(DATA);
+        
+        DATA_TIMESTAMP = TIMESTAMP;
+      } else {
+        return;
+      }
     }
     
-    switch(SENSOR)
+    if (DATA == 1)
     {
-      // ULTRASONIC
-      case 1:
-        if (DATA == 0)
-        {
-          return;
-        }
-        break;
-      // PIR
-      case 2:
-        break;
-    }
-    
-    if (!LED_STATE)
-    {
-      LedOn(LED_PINS);
-    } else {
-      LedOff(LED_PINS);
+      if (!LED_STATE)
+      {
+        LedOn(LED_PINS);
+      } else {
+        LedOff(LED_PINS);
+      }
     }
   }
 }

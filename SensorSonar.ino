@@ -1,6 +1,7 @@
 int SENSOR_SONAR_PINS[2] = { 7, 8 };
 int SENSOR_SONAR_BUTTON  = 4;
 int SENSOR_SONAR_THRESHOLD = 0;
+int SENSOR_SONAR_CAN_TRIGGER = true;
 
 int SensorSonarSetup()
 {
@@ -42,10 +43,21 @@ long SensorSonarConvert(long duration)
 
 int SensorSonarState()
 {
-  if (SensorSonarRead() < SENSOR_SONAR_THRESHOLD)
+  int data = SensorSonarRead();
+  
+  if (data < SENSOR_SONAR_THRESHOLD)
   {
-    return 1;
+    if (SENSOR_SONAR_CAN_TRIGGER)
+    {
+      SENSOR_SONAR_CAN_TRIGGER = false;
+      
+      return 1;
+    } else {
+      return 0;
+    }
   } else {
+    SENSOR_SONAR_CAN_TRIGGER = true;
+    
     return 0;
   }
 }

@@ -47,13 +47,21 @@ int RadioFrequencyRead()
 
 void RadioFrequencyWrite(int data)
 {
-  char message[4]; 
+  char message[4];
+  int count = 5;
+  int i     = 0;
+  
   data = data + (RF_CHANNEL * 1000);
   
   itoa(data, message, 10);
   
-  vw_send((uint8_t *)message, strlen(message));
-  vw_wait_tx();
-  
-  delay(200);
+  while (i < count)
+  {
+    vw_send((uint8_t *)message, strlen(message));
+    vw_wait_tx();
+    
+    i++;
+    
+    delay(200);
+  }
 }
