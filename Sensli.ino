@@ -59,7 +59,7 @@ void setup()
 
 void loop()
 {
-  if (TRANSMITTER || (WIRELESS && RECEIVER))
+  if (TRANSMITTER || (!WIRELESS && RECEIVER))
   {
     if (SENSOR == SENSOR_SONAR)
     {
@@ -90,39 +90,37 @@ void loop()
     }
   }
   
-  if (WIRELESS && RECEIVER)
+  if (RECEIVER)
   {
-    DATA = RadioFrequencyRead();
-    
-    if (DATA == 0)
+    if (WIRELESS)
     {
-      return;
+      DATA = RadioFrequencyRead();
+      
+      if (DATA == 0)
+      {
+        return;
+      }
+      
+      Serial.println(DATA);
+      
+      SENSOR = floor(DATA / 100);
+      DATA   = DATA % 100;
     }
     
-    Serial.println(DATA);
+    switch(SENSOR)
+    {
+      // ULTRASONIC
+      case 1:
+        if (DATA == 0)
+        {
+          return;
+        }
+        break;
+      // PIR
+      case 2:
+        break;
+    }
     
-    SENSOR = floor(DATA / 100);
-    DATA   = DATA % 100;
-  }
-  
-  switch(SENSOR)
-  {
-    // ULTRASONIC
-    case 1:
-      if (DATA == 1)
-      {
-        TRIGGER_STATE = true;
-      } else {
-        TRIGGER_STATE = false;
-      }
-      break;
-    // PIR
-    case 2:
-      break;
-  }
-  
-  if (RECEIVER && TRIGGER_STATE)
-  {
     if (!LED_STATE)
     {
       LedOn(LED_PINS);
