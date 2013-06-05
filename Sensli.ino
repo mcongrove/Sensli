@@ -2,7 +2,6 @@
   FEATURES LEFT TO IMPLEMENT:
     Channel Input
     RGB Color Input
-    Sonar Distance Input
     PIR Control
 */
 
@@ -14,8 +13,8 @@ const boolean RECEIVER    = true;
 const boolean WIRELESS    = true;
 
 // SENSOR INFORMATION
-const int SENSOR_SONAR     = 1;
-const int SENSOR_PIR       = 2;
+const int SENSOR_SONAR = 1;
+const int SENSOR_PIR   = 2;
 
 // CUSTOM SETTINGS
 int SENSOR       = SENSOR_SONAR;
@@ -24,7 +23,6 @@ int LED_COLOR[3] = { 255, 255, 255 };
 int LED_PINS[3]  = { 10, 11, 9 };
 
 // STATES
-boolean CAN_TRIGGER   = true;
 boolean TRIGGER_STATE = false;
 boolean LED_STATE     = false;
 int DATA;
@@ -75,18 +73,20 @@ void loop()
       // Do Something
     }
     
-    if (TRANSMITTER)
+    if (DATA != DATA_PREVIOUS)
     {
-      if (DATA != DATA_PREVIOUS)
+      if (TRANSMITTER)
       {
         RadioFrequencyWrite(((SENSOR * 100) + DATA));
         
-        DATA_PREVIOUS = DATA;
-        
-        delay(STUTTER);
-        
-        return;
+        Serial.println(DATA);
       }
+      
+      DATA_PREVIOUS = DATA;
+      
+      delay(STUTTER);
+      
+      return;
     }
   }
   
@@ -121,29 +121,13 @@ void loop()
       break;
   }
   
-  if (RECEIVER)
+  if (RECEIVER && TRIGGER_STATE)
   {
-    if (!CAN_TRIGGER && !TRIGGER_STATE)
+    if (!LED_STATE)
     {
-      CAN_TRIGGER = true;
-      
-      return;
-    }
-    
-    if (CAN_TRIGGER && TRIGGER_STATE)
-    {
-      if (!LED_STATE)
-      {
-        LedOn(LED_PINS);
-      } else {
-        LedOff(LED_PINS);
-      }
-      
-      CAN_TRIGGER = false;
-      
-      delay(STUTTER);
-      
-      return;
+      LedOn(LED_PINS);
+    } else {
+      LedOff(LED_PINS);
     }
   }
 }
