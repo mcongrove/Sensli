@@ -9,8 +9,8 @@
 #include <math.h>
 
 // CONTROLLER INFORMATION
-const boolean TRANSMITTER = true;
-const boolean RECEIVER    = false;
+const boolean TRANSMITTER = false;
+const boolean RECEIVER    = true;
 const boolean WIRELESS    = true;
 
 // SENSOR INFORMATION
@@ -75,27 +75,21 @@ void loop()
       // Do Something
     }
     
-    if (DATA != DATA_PREVIOUS)
+    if (TRANSMITTER)
     {
-      Serial.print("Writing: ");
-      Serial.println(DATA);
-      
-      RadioFrequencyWrite(((SENSOR * 100) + DATA));
-      
-      DATA_PREVIOUS = DATA;
-      
-      delay(500);
+      if (DATA != DATA_PREVIOUS)
+      {
+        RadioFrequencyWrite(((SENSOR * 100) + DATA));
+        
+        DATA_PREVIOUS = DATA;
+        
+        delay(STUTTER);
+        
+        return;
+      }
     }
   }
   
-  
-  
-  
-  
-  
-  
-  
-  /*
   if (WIRELESS && RECEIVER)
   {
     DATA = RadioFrequencyRead();
@@ -108,27 +102,18 @@ void loop()
     Serial.println(DATA);
     
     SENSOR = floor(DATA / 100);
+    DATA   = DATA % 100;
   }
   
   switch(SENSOR)
   {
     // ULTRASONIC
     case 1:
-      if (TRANSMITTER || !WIRELESS)
+      if (DATA == 1)
       {
-        DATA = SensorSonarRead();
+        TRIGGER_STATE = true;
       } else {
-        DATA = DATA - (SENSOR_SONAR * 100);
-      }
-      
-      if (RECEIVER)
-      {
-        if (DATA < SENSOR_SONAR_THRESHOLD)
-        {
-          TRIGGER_STATE = true;
-        } else {
-          TRIGGER_STATE = false;
-        }
+        TRIGGER_STATE = false;
       }
       break;
     // PIR
@@ -160,19 +145,5 @@ void loop()
       
       return;
     }
-  } else if (TRANSMITTER) {
-    if (DATA != DATA_PREVIOUS)
-    {
-      RadioFrequencyWrite(((SENSOR * 100) + DATA));
-      
-      DATA_PREVIOUS = DATA;
-      
-      delay(200);
-    } else {
-      delay(100);
-    }
-    
-    return;
   }
-  */
 }
