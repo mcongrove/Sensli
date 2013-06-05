@@ -6,6 +6,7 @@
 */
 
 #include <math.h>
+#include <EEPROM.h>
 
 // CONTROLLER INFORMATION
 const boolean TRANSMITTER = false;
@@ -25,8 +26,11 @@ int LED_PINS[3]  = { 10, 11, 9 };
 // STATES
 boolean TRIGGER_STATE = false;
 boolean LED_STATE     = false;
+
+// DATA INFORMATION
 int DATA;
 unsigned long DATA_TIMESTAMP;
+int EEPROM_ADDRESS = 0;
 
 void setup()
 {

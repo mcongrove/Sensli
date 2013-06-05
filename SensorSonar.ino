@@ -10,13 +10,26 @@ int SensorSonarSetup()
   pinMode(SENSOR_SONAR_BUTTON, INPUT);
 }
 
-int SensorSonarButtonListener()
+void SensorSonarButtonListener()
 {
   int state = digitalRead(SENSOR_SONAR_BUTTON);
   
   if (state == HIGH)
   {
-    SENSOR_SONAR_THRESHOLD = SensorSonarRead() - 2;
+    int distance = SensorSonarRead();
+    
+    if (distance <= 7)
+    {
+      return;
+    }
+    
+    SENSOR_SONAR_THRESHOLD = distance;
+    byte EEPROM_DATA       = EEPROM.read(EEPROM_ADDRESS + (SENSOR_SONAR * 100));
+    
+    if (SENSOR_SONAR_THRESHOLD != EEPROM_DATA)
+    {
+      EEPROM.write(EEPROM_ADDRESS + (SENSOR_SONAR * 100), SENSOR_SONAR_THRESHOLD);
+    }
   }
 }
 
