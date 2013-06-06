@@ -13,6 +13,14 @@ int SensorSonarSetup()
   pinMode(SENSOR_SONAR_PINS[0], OUTPUT);
   pinMode(SENSOR_SONAR_PINS[1], INPUT);
   pinMode(SENSOR_SONAR_BUTTON, INPUT);
+  
+  // Read the previous threshold from EEPROM
+  byte eeprom_data = EEPROM.read(EEPROM_ADDRESS + (SENSOR_SONAR * 100));
+  
+  if (eeprom_data > 7)
+  {
+    SENSOR_SONAR_THRESHOLD = eeprom_data;
+  }
 }
 
 /*
@@ -40,10 +48,10 @@ void SensorSonarButtonListener()
     SENSOR_SONAR_THRESHOLD = distance;
     
     // Read the previous threshold from EEPROM
-    byte EEPROM_DATA       = EEPROM.read(EEPROM_ADDRESS + (SENSOR_SONAR * 100));
+    byte eeprom_data = EEPROM.read(EEPROM_ADDRESS + (SENSOR_SONAR * 100));
     
     // Check if new threshold is different from saved threshold
-    if (SENSOR_SONAR_THRESHOLD != EEPROM_DATA)
+    if (SENSOR_SONAR_THRESHOLD != eeprom_data)
     {
       // Write new threshold if it's a different value
       EEPROM.write(EEPROM_ADDRESS + (SENSOR_SONAR * 100), SENSOR_SONAR_THRESHOLD);
