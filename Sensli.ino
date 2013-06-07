@@ -4,9 +4,10 @@
 #include <EEPROM.h>
 
 // Controller information
-const boolean TRANSMITTER = false;
-const boolean RECEIVER    = true;
+const boolean TRANSMITTER = true;
+const boolean RECEIVER    = false;
 const boolean WIRELESS    = true;
+const int SENSOR          = 1;
 
 // Sensor information
 const int SENSOR_SONAR = 1;
@@ -22,7 +23,6 @@ unsigned long DATA_TIMESTAMP;
 int EEPROM_ADDRESS = 0;
 
 // User-defined settings
-int SENSOR       = SENSOR_SONAR;
 int STUTTER      = 3000;
 int LED_COLOR[3] = { 255, 255, 255 };
 int LED_PINS[3]  = { 10, 11, 9 };
@@ -74,20 +74,15 @@ void loop()
   // Check if the sensor is on-board
   if (TRANSMITTER || (!WIRELESS && RECEIVER))
   {
-    // Check if using sonar sensor
-    if (SENSOR == SENSOR_SONAR)
+    switch(SENSOR)
     {
-      // Listen for the button to set sonar threshold
-      SensorSonarButtonListener();
-      
-      // Read the state of the sonar sensor
-      DATA = SensorSonarState();
-    }
-    
-    // Check if using PIR sensor
-    if (SENSOR == SENSOR_PIR)
-    {
-      // Do Something
+      case SENSOR_SONAR:
+          // Listen for the button to set sonar threshold
+          SensorSonarButtonListener();
+          
+          // Read the state of the sonar sensor
+          DATA = SensorSonarState();
+        break;
     }
     
     // Check if we have data
@@ -97,7 +92,7 @@ void loop()
       if (TRANSMITTER)
       {
         // Send data over RF
-        RadioFrequencyWrite(((SENSOR * 100) + DATA));
+        RadioFrequencyWrite(DATA);
         
         // Output data for debugging
         // Serial.println(DATA);
@@ -126,11 +121,8 @@ void loop()
         return;
       }
       
-      // Determine what kind of sensor sent the data
-      SENSOR    = floor(DATA / 100);
-      
-      // Remove sensor identifier from data
-      DATA      = DATA % 100;
+      // Remove identifiers from data
+      DATA = DATA % 100;
       
       // Get timestamp of data retrieval
       unsigned long timestamp = millis();
