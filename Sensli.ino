@@ -17,17 +17,23 @@ const int SENSOR_PIR   = 2;
 // States
 boolean TRIGGER_STATE = false;
 boolean LED_STATE     = false;
-boolean MENU_STATE       = false;
+boolean MENU_STATE    = false;
 
 // Data Information
 int DATA;
 unsigned long DATA_TIMESTAMP;
 int EEPROM_ADDRESS = 0;
 
-// User-defined settings
+// Misc Settings
 int STUTTER      = 3000;
-int LED_COLOR[3] = { 255, 255, 255 };
 int LED_PINS[3]  = { 10, 11, 9 };
+
+// User-defined settings
+int RF_CHANNEL = 1;
+int RED        = 255;
+int GREEN      = 255;
+int BLUE       = 255;
+// int FADE       = 0;
 
 /*
  * Setup function, runs once at Arduino start
@@ -49,7 +55,6 @@ void setup()
   {
     // Set up LEDs
     LedSetup(LED_PINS);
-    LedSetColor(LED_COLOR);
     
     // Set up LCD menu
     MenuSetup();

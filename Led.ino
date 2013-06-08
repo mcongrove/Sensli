@@ -1,13 +1,10 @@
-// Color values for each RGB channel
-int RED   = 255;
-int GREEN = 255;
-int BLUE  = 255;
-
 /*
  * Setup LEDs
  */
 void LedSetup(int* pins)
 {
+  // TODO: Load initial color settings
+  
   // Loop through all LEDs
   for (int i = 0; i < 3; i++)
   {
@@ -19,11 +16,11 @@ void LedSetup(int* pins)
 /*
  * Save the color for the LEDs
  */
-void LedSetColor(int* color)
+void LedSetColor(int red, int green, int blue)
 {
-  RED   = color[0];
-  GREEN = color[1];
-  BLUE  = color[2];
+  RED   = red;
+  GREEN = green;
+  BLUE  = blue;
 }
 
 /*

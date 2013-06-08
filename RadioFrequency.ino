@@ -1,5 +1,4 @@
 // RF information
-int RF_CHANNEL = 5;
 int RF_PINS[2] = { 3, 50 };
 
 /*

@@ -5,11 +5,11 @@ const int MENU_DPAD_DOWN      = 10;
 const int MENU_DPAD_LEFT      = 11;
 const int MENU_DPAD_RIGHT     = 9;
 const int MENU_DPAD_PUSH      = 12;
-const int MENU_LIST_LENGTH[8] = { 7, 255, 255, 255, 3, 2, 5, 0 };
+const int MENU_LIST_LENGTH[7] = { 7, 255, 255, 255, 3, 5, 0 };
 int MENU_INDEX                = 1;
 int MENU_LIST                 = 0;
 int MENU_VALUE                = 0;
-int MENU_VALUES[8]            = { 1, 255, 255, 255, 1, 1, 1, 0 };
+int MENU_VALUES[7]            = { 1, 255, 255, 255, 1, 1, 0 };
 
 // Instantiate LCD screen
 SoftwareSerial MENU_LCD = SoftwareSerial(255, MENU_LCD_PIN);
@@ -63,6 +63,9 @@ void MenuOn()
 {
   MENU_STATE = true;
   
+  // Turn on LEDs for visual editing
+  LedOn(LED_PINS);
+  
   // Turn on LCD and reset
   MENU_LCD.write(22);
   MENU_LCD.write(17);
@@ -97,6 +100,9 @@ void MenuOff()
   MENU_LIST  = 0;
   MENU_INDEX = 1;
   MENU_VALUE = 0;
+  
+  // Turn off LEDs
+  LedOff(LED_PINS);
 }
 
 /*
@@ -139,21 +145,15 @@ void MenuShowItem()
           MENU_LCD.write(1);
           MENU_LCD.print("Color: Presets");
           MENU_LCD.write(13);
-          MENU_LCD.print(" Fade");
-          break;
-        case 5:
-          MENU_LCD.write(1);
-          MENU_LCD.print("Fade");
-          MENU_LCD.write(13);
           MENU_LCD.print(" Radio Channel");
           break;
-        case 6:
+        case 5:
           MENU_LCD.write(1);
           MENU_LCD.print("Radio Channel");
           MENU_LCD.write(13);
           MENU_LCD.print(" Done");
           break;
-        case 7:
+        case 6:
           MENU_LCD.write(1);
           MENU_LCD.print("Done");
           MENU_LCD.write(13);
@@ -168,6 +168,9 @@ void MenuShowItem()
       MENU_LCD.print(MENU_VALUE);
       
       MENU_VALUES[1] = MENU_VALUE;
+      RED            = MENU_VALUE;
+      
+      LedOn(LED_PINS);
       break;
     // Color: Green menu
     case 2:
@@ -176,6 +179,9 @@ void MenuShowItem()
       MENU_LCD.print(MENU_VALUE);
       
       MENU_VALUES[2] = MENU_VALUE;
+      GREEN          = MENU_VALUE;
+      
+      LedOn(LED_PINS);
       break;
     // Color: Blue menu
     case 3:
@@ -184,6 +190,9 @@ void MenuShowItem()
       MENU_LCD.print(MENU_VALUE);
       
       MENU_VALUES[3] = MENU_VALUE;
+      BLUE           = MENU_VALUE;
+      
+      LedOn(LED_PINS);
       break;
     // Color: Presets menu
     case 4:
@@ -198,6 +207,9 @@ void MenuShowItem()
           MENU_VALUES[1] = 255;
           MENU_VALUES[2] = 255;
           MENU_VALUES[3] = 255;
+          
+          LedSetColor(255, 255, 255);
+          LedOn(LED_PINS);
           break;
         case 2:
           MENU_LCD.print("Warm White");
@@ -205,6 +217,9 @@ void MenuShowItem()
           MENU_VALUES[1] = 135;
           MENU_VALUES[2] = 120;
           MENU_VALUES[3] = 30;
+          
+          LedSetColor(135, 120, 30);
+          LedOn(LED_PINS);
           break;
         case 3:
           MENU_LCD.print("Soft White");
@@ -212,12 +227,16 @@ void MenuShowItem()
           MENU_VALUES[1] = 80;
           MENU_VALUES[2] = 70;
           MENU_VALUES[3] = 15;
+          
+          LedSetColor(80, 70, 15);
+          LedOn(LED_PINS);
           break;
       }
       
       MENU_VALUES[4] = MENU_VALUE;
       break;
     // Fade menu
+    /*
     case 5:
       MENU_LCD.print("Fade:");
       MENU_LCD.write(13);
@@ -226,24 +245,30 @@ void MenuShowItem()
       {
         case 1:
           MENU_LCD.print("On");
+          
+          FADE = 1;
           break;
         case 2:
           MENU_LCD.print("Off");
+          
+          FADE = 0;
           break;
       }
       
       MENU_VALUES[5] = MENU_VALUE;
       break;
+    */
     // RF Channel menu
-    case 6:
+    case 5:
       MENU_LCD.print("Radio Channel:");
       MENU_LCD.write(13);
       MENU_LCD.print(MENU_VALUE);
       
       MENU_VALUES[6] = MENU_VALUE;
+      RF_CHANNEL     = MENU_VALUE;
       break;
     // Done
-    case 7:
+    case 6:
       MenuOff();
       break;
   }
