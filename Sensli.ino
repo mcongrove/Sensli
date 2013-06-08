@@ -1,6 +1,7 @@
 // Include required libraries
 #include <math.h>
 #include <VirtualWire.h>
+#include <SoftwareSerial.h>
 #include <EEPROM.h>
 
 // Controller information
@@ -16,6 +17,7 @@ const int SENSOR_PIR   = 2;
 // States
 boolean TRIGGER_STATE = false;
 boolean LED_STATE     = false;
+boolean MENU_STATE       = false;
 
 // Data Information
 int DATA;
@@ -48,6 +50,9 @@ void setup()
     // Set up LEDs
     LedSetup(LED_PINS);
     LedSetColor(LED_COLOR);
+    
+    // Set up LCD menu
+    MenuSetup();
   }
   
   // Check if we have a sensor on-board
@@ -109,6 +114,16 @@ void loop()
   // Check if controller is receiver
   if (RECEIVER)
   {
+    // Add LCD menu listeners
+    if (MENU_STATE)
+    {
+      // Listen for D-pad input
+      MenuDpadListener();
+    } else {
+      // Listen for start button input
+      MenuStartListener();
+    }
+    
     // Check if controller is wireless-enabled
     if (WIRELESS)
     {
