@@ -171,6 +171,8 @@ void MenuShowItem()
       RED            = MENU_VALUE;
       
       LedOn(LED_PINS);
+      
+      // TODO: Save value
       break;
     // Color: Green menu
     case 2:
@@ -182,6 +184,8 @@ void MenuShowItem()
       GREEN          = MENU_VALUE;
       
       LedOn(LED_PINS);
+      
+      // TODO: Save value
       break;
     // Color: Blue menu
     case 3:
@@ -193,6 +197,8 @@ void MenuShowItem()
       BLUE           = MENU_VALUE;
       
       LedOn(LED_PINS);
+      
+      // TODO: Save value
       break;
     // Color: Presets menu
     case 4:
@@ -234,6 +240,8 @@ void MenuShowItem()
       }
       
       MENU_VALUES[4] = MENU_VALUE;
+      
+      // TODO: Save values
       break;
     // Fade menu
     /*
@@ -256,6 +264,8 @@ void MenuShowItem()
       }
       
       MENU_VALUES[5] = MENU_VALUE;
+      
+      // TODO: Save value
       break;
     */
     // RF Channel menu
@@ -266,6 +276,8 @@ void MenuShowItem()
       
       MENU_VALUES[6] = MENU_VALUE;
       RF_CHANNEL     = MENU_VALUE;
+      
+      // TODO: Save value
       break;
     // Done
     case 6:
