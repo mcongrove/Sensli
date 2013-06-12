@@ -4,9 +4,9 @@
 #include <EEPROM.h>
 
 // Controller information
-const boolean TRANSMITTER = true;
-const boolean RECEIVER    = false;
-const boolean WIRELESS    = true;
+const boolean TRANSMITTER = false;
+const boolean RECEIVER    = true;
+const boolean WIRELESS    = false;
 const int SENSOR          = 1;
 
 // Sensor information
@@ -24,7 +24,7 @@ int EEPROM_ADDRESS = 0;
 
 // User-defined settings
 int STUTTER      = 3000;
-int LED_COLOR[3] = { 255, 255, 255 };
+int LED_COLOR[3] = { 170, 50, 0 }; // Warm White
 int LED_PINS[3]  = { 10, 11, 9 };
 
 /*
@@ -82,6 +82,9 @@ void loop()
           
           // Read the state of the sonar sensor
           DATA = SensorSonarState();
+          
+          // Output data for debugging
+          // Serial.println(DATA);
         break;
     }
     
@@ -96,13 +99,13 @@ void loop()
         
         // Output data for debugging
         // Serial.println(DATA);
+        
+        // Delay to purposefully miss data immediately after trigger
+        delay(STUTTER);
+        
+        // Exit, done transmitting data
+        return;
       }
-      
-      // Delay to purposefully miss data immediately after trigger
-      delay(STUTTER);
-      
-      // Exit, done transmitting data
-      return;
     }
   }
   
@@ -131,7 +134,7 @@ void loop()
       if ((timestamp - DATA_TIMESTAMP) > STUTTER)
       {
         // Output data for debugging
-        //Serial.println(DATA);
+        // Serial.println(DATA);
         
         // Save timestamp of data retrieval
         DATA_TIMESTAMP = timestamp;
@@ -153,6 +156,9 @@ void loop()
         // Turn LEDs off
         LedOff(LED_PINS);
       }
+      
+      // Delay to purposefully miss data immediately after trigger
+      delay(STUTTER);
     }
   }
 }

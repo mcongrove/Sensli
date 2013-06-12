@@ -35,9 +35,9 @@ void LedOn(int* pins)
   LED_STATE = true;
   
   // Write to each LED pin
-  digitalWrite(pins[0], RED);
-  digitalWrite(pins[1], GREEN);
-  digitalWrite(pins[2], BLUE);
+  analogWrite(pins[0], RED);
+  analogWrite(pins[1], GREEN);
+  analogWrite(pins[2], BLUE);
 }
 
 /*

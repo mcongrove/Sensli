@@ -1,7 +1,7 @@
 // Sonar information
 int SENSOR_SONAR_PINS[2] = { 7, 8 };
 int SENSOR_SONAR_BUTTON  = 4;
-int SENSOR_SONAR_THRESHOLD = 0;
+int SENSOR_SONAR_THRESHOLD = 10;
 int SENSOR_SONAR_CAN_TRIGGER = true;
 
 /*
@@ -19,7 +19,7 @@ int SensorSonarSetup()
   
   if (eeprom_data > 7)
   {
-    SENSOR_SONAR_THRESHOLD = eeprom_data;
+    //SENSOR_SONAR_THRESHOLD = eeprom_data;
   }
 }
 
@@ -81,7 +81,7 @@ int SensorSonarRead()
   duration = pulseIn(SENSOR_SONAR_PINS[1], HIGH);
   
   // Convert the pulse time to a distance (inches)
-  inches   = SensorSonarConvert(duration) % 100;
+  inches = SensorSonarConvert(duration) % 100;
   
   return (int) inches;
 }
