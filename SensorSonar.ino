@@ -1,6 +1,6 @@
 // Sonar information
-int SENSOR_SONAR_PINS[2] = { 7, 8 };
-int SENSOR_SONAR_BUTTON  = 4;
+int SENSOR_SONAR_PINS[2] = { 6, 7 };
+int SENSOR_SONAR_BUTTON  = 5;
 int SENSOR_SONAR_THRESHOLD = 10;
 int SENSOR_SONAR_CAN_TRIGGER = true;
 
@@ -13,6 +13,9 @@ int SensorSonarSetup()
   pinMode(SENSOR_SONAR_PINS[0], OUTPUT);
   pinMode(SENSOR_SONAR_PINS[1], INPUT);
   pinMode(SENSOR_SONAR_BUTTON, INPUT);
+  
+  // Set the button pin to HIGH
+  digitalWrite(SENSOR_SONAR_BUTTON, HIGH);
   
   // Read the previous threshold from EEPROM
   byte eeprom_data = EEPROM.read(EEPROM_ADDRESS + (SENSOR_SONAR * 100));
@@ -32,7 +35,7 @@ void SensorSonarButtonListener()
   int state = digitalRead(SENSOR_SONAR_BUTTON);
   
   // Check if button is pressed
-  if (state == HIGH)
+  if (state == LOW)
   {
     // Read the distance from the sonar sensor
     int distance = SensorSonarRead();
