@@ -48,7 +48,7 @@ void SensorSonarButtonListener()
     }
     
     // Set the sonar threshold
-    SENSOR_SONAR_THRESHOLD = distance;
+    SENSOR_SONAR_THRESHOLD = distance - 2;
     
     // Read the previous threshold from EEPROM
     byte eeprom_data = EEPROM.read(EEPROM_ADDRESS + (SENSOR_SONAR * 100));
