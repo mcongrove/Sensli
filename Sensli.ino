@@ -24,8 +24,9 @@ int EEPROM_ADDRESS = 0;
 
 // User-defined settings
 int STUTTER      = 3000;
-int LED_COLOR[3] = { 170, 50, 0 }; // Warm White
-int LED_PINS[3]  = { 10, 11, 9 };
+int LED_COLOR[3] = { 255, 255, 255 }; // Bright White
+//int LED_COLOR[3] = { 170, 50, 0 }; // Warm White
+int LED_PINS[3]  = { A0, A1, A2 };
 
 /*
  * Setup function, runs once at Arduino start

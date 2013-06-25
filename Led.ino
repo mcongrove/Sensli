@@ -49,7 +49,7 @@ void LedOff(int* pins)
   LED_STATE = false;
   
   // Write to each LED pin
-  digitalWrite(pins[0], 0);
-  digitalWrite(pins[1], 0);
-  digitalWrite(pins[2], 0);
+  analogWrite(pins[0], 1);
+  analogWrite(pins[1], 1);
+  analogWrite(pins[2], 1);
 }
